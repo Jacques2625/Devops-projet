@@ -1,4 +1,5 @@
 import time
+import socket
 from fastapi import FastAPI
 from code.databases.mysql_session import engine, Base, SessionLocal
 from code.routers.trad import router as trad_router
@@ -34,3 +35,11 @@ app.include_router(trad_router)
 @app.get("/")
 def index():
     return {"msg": "Devops - projet de Jacques Lin"}
+
+
+# Pour tester le load balancing avec plusieurs conteneurs
+"""
+@app.get("/whoami")
+def whoami():
+    return {"container": socket.gethostname()}
+"""
