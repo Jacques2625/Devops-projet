@@ -1,0 +1,42 @@
+version: "3"
+services:
+  db:
+    image: mysql
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: 'dictionnaire' 
+    networks:
+      - dev
+
+  phpmyadmin:
+    image: phpmyadmin
+    depends_on: 
+      - db
+    ports:
+      - 8090:80
+    environment:
+      PMA_HOST: db 
+    networks:
+      - dev  
+      
+  fastapi:
+    build:
+      context: . 
+    container_name: fastapi
+    depends_on: 
+      - db
+    ports:
+      - 5000:80
+    networks:
+      - dev
+    volumes:
+      - ./app:/app/code
+
+networks:
+  dev:
+
+volumes: 
+  db-data: 
+
